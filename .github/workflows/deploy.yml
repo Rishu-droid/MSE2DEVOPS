@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+# ✅ REQUIRED for git push
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -32,11 +36,11 @@ jobs:
       - name: Deploy step
         run: echo "Deploying application to server..."
 
-      # 6. Commit & Push (safe version)
+      # 6. Commit & Push (FIXED)
       - name: Commit changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
           git add .
           git commit -m "This is the new CI/CD pipeline for CA2" || echo "No changes to commit"
-          git push
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
